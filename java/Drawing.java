@@ -7,17 +7,6 @@
 
 import ecs100.UI;
 import java.util.*;
-import java.io.BufferedWriter;
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.OutputStreamWriter;
-import java.io.Writer;
-import java.io.BufferedReader;
-import java.io.FileInputStream;
-import java.io.FileReader;
-import java.io.InputStream;
-import java.io.InputStreamReader;
 
 import java.awt.Color;
 
@@ -56,7 +45,7 @@ public class Drawing {
     }
 
     public void draw(){
-           //draw path
+       //draw path
         for (int i = 1; i < path.size() ; i++){
             PointXY p0 = get_drawing_point(i-1);
             PointXY p1 = get_drawing_point(i);
@@ -70,6 +59,8 @@ public class Drawing {
         }
     }
 
+    // Getters and Setters
+    
     public ArrayList<PointXY> getPath() {
     	return path;
     }
@@ -88,57 +79,6 @@ public class Drawing {
         return lp;
     }
 
-    public void save_path(String fname){
-
-        try {
-            //Whatever the file path is.
-            File statText = new File(fname);
-            FileOutputStream is = new FileOutputStream(statText);
-            OutputStreamWriter osw = new OutputStreamWriter(is);
-            Writer w = new BufferedWriter(osw);
-            String str_out;
-            for (int i = 0; i < path.size() ; i++){
-                if (path.get(i).get_pen()) {
-                  str_out = path.get(i).get_x() +" "+ path.get(i).get_y() +" 1\n";
-                } else {
-                  str_out = path.get(i).get_x() +" "+ path.get(i).get_y() +" 0\n";
-                }
-                w.write(str_out);
-            }
-            w.close();
-        } catch (IOException e) {
-            UI.println("Problem writing to the file statsTest.txt");
-        }
-    }
-
-
-    public void load_path(String fname){
-
-      String  in_line = null;
-      try{
-         // open input stream test.txt for reading purpose.
-         BufferedReader in = new BufferedReader(new FileReader(new File(fname)));
-         // clear existing path
-         path.clear();
-
-         while ((in_line = in.readLine()) != null) {
-            UI.println(in_line);
-            String[] tokens = in_line.split(" ");
-            UI.println("Number of tokens in line " + in_line + ": " + tokens.length);
-            UI.println("The tokens are:");
-            UI.printf("%s %s %s\n",tokens[0],tokens[1],tokens[2]);
-            double x = Double.parseDouble(tokens[0]);
-            double y = Double.parseDouble(tokens[1]);
-            boolean pen = (Integer.parseInt(tokens[2]) == 1) ;
-            add_point_to_path(x,y,pen);
-         }
-      }catch(Exception e){
-
-         e.printStackTrace();
-      }
-
-    }
-
     public int get_drawing_size() {
         return path.size();
     }
@@ -147,7 +87,4 @@ public class Drawing {
         PointXY p = path.get(i);
         return p;
     }
-    
-    
-
 }

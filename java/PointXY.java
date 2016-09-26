@@ -29,8 +29,7 @@
         public void set_y(double yi){
             y=yi;
         }
-        public void set_pen(boolean peni){
-            pen_down=peni;
+        public void set_pen(boolean pen){
+            pen_down=pen;
         }
-        
     }

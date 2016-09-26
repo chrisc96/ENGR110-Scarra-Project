@@ -1,6 +1,6 @@
 
 
-/* Code for Assignment ??
+/* Code for Assignment 6
  * Name:
  * Usercode:
  * ID:
@@ -9,6 +9,7 @@
 
 import ecs100.*;
 import java.awt.*;
+import java.io.*;
 
 /** <description of class Main>
  */
@@ -28,21 +29,27 @@ public class Main{
                        // 1 - inverse point kinematics - point
                        // 2 - enter path. Each click adds point
                        // 3 - enter path pause. Click does not add the point to the path
-
     
     public Main(){
     	
     	UI.initialise();
     	
+    	// Setting Window Size
     	Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
         width = (int) screenSize.getWidth()-200;
         height = (int) screenSize.getHeight()-200;
         UI.setWindowSize(width, height);
         UI.setDivider(0.4);
-    	
-        
+
         UI.addButton("Enter path XY", this::enter_path_xy);
         UI.addButton("Convert to PWM", this::savePWM);
+        UI.addButton("Send to RPi", () -> {
+			try {
+				sendToRPI();
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+		});
         UI.addButton("Quit", UI::quit);
         
         // Event Handlers
@@ -151,7 +158,6 @@ public class Main{
         }
     }
 
-
     public void enter_path_xy(){
     	UI.clearText();
         state = 2;
@@ -175,8 +181,18 @@ public class Main{
         tool_path.save_pwm_file();
     }
 
+    public void sendToRPI() throws IOException {
+    	String fileToSend = UIFileChooser.open();
+		if (fileToSend == null) return;
+		
+		// https://www.raspberrypi.org/documentation/remote-access/ssh/scp.md
+		
+		String[] command = {"/usr/bin/bash", "scp", "/Test_Cases/${fileToSend}", "pi@IP-HERE:Arm/"};
+		ProcessBuilder proc = new ProcessBuilder(command);
+		proc.start();
+    }
+    
     public static void main(String[] args){
         new Main();
     }
-
 }

@@ -10,23 +10,10 @@
  * @Arthur Roberts
  * @1000000.0
  */
-import ecs100.UI;
 import ecs100.UIFileChooser;
-
+import ecs100.UI;
+import java.io.*;
 import java.util.*;
-import java.io.BufferedWriter;
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.OutputStreamWriter;
-import java.io.PrintStream;
-import java.io.Writer;
-import java.io.BufferedReader;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.FileReader;
-import java.io.InputStream;
-import java.io.InputStreamReader;
 
 
 public class ToolPath{
@@ -75,45 +62,15 @@ public class ToolPath{
                 theta2_vector.add(arm.get_theta2()*180/Math.PI);
                 pwm1_vector.add(arm.get_pwm1());
                 pwm2_vector.add(arm.get_pwm2());
-                if (p1.get_pen()){
+                if (p1.get_pen()) {
+                	// Pen down is 1000 PWM
                 	pwm3_vector.add(1000);
-                }else{
-                	pwm3_vector.add(2000);
-
                 }
-
-                if (p0.get_pen()){
-                  pen_vector.add(1);
-                } else {
-                  pen_vector.add(0);
+                else {
+                	// Pen up is 1700 PWM
+                	pwm3_vector.add(1700);
                 }
             }
-        }
-
-
-    }
-
-    public void save_angles(String fname){
-        for ( int i = 0 ; i < theta1_vector.size(); i++){
-         UI.printf(" t1=%3.1f t2=%3.1f pen=%d\n",
-            theta1_vector.get(i),theta2_vector.get(i),pen_vector.get(i));
-        }
-
-         try {
-            //Whatever the file path is.
-            File statText = new File(fname);
-            FileOutputStream is = new FileOutputStream(statText);
-            OutputStreamWriter osw = new OutputStreamWriter(is);
-            Writer w = new BufferedWriter(osw);
-            String str_out;
-            for (int i = 1; i < theta1_vector.size() ; i++){
-                str_out = String.format("%3.1f,%3.1f,%d\n",
-                  theta1_vector.get(i),theta2_vector.get(i),pen_vector.get(i));
-                w.write(str_out);
-            }
-            w.close();
-        } catch (IOException e) {
-            UI.println("Problem writing to the file statsTest.txt");
         }
     }
 
@@ -138,6 +95,7 @@ public class ToolPath{
             for(int i=0; i< pwm1_vector.size(); i++){
                 out.printf("%d,%d,%d\n", pwm1_vector.get(i), pwm2_vector.get(i), pwm3_vector.get(i));
             }
+            out.close();
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         }
