@@ -36,7 +36,9 @@ public class Main{
         UI.addButton("Load path XY", this::load_xy);    //-----Sets state to 0 then loads a file through the drawing object (drawing.load_path(fname)) it then draws through arm and drawing object (drawing.draw, arm.draw)
         UI.addButton("Save path Ang", this::save_ang);  //-----Does something through the tool_path object, supposedly saves the angles tool_path.convert_drawing_to_angles(drawing,arm,fname);
         UI.addButton("Load path Ang:Play", this::load_ang); //-----Does nothing (yet)
-                
+
+        UI.addButton("Save PWM", this::savePWM);
+
        // UI.addButton("Quit", UI::quit);
         UI.setMouseMotionListener(this::doMouse);
         UI.setKeyListener(this::doKeys);
@@ -46,6 +48,8 @@ public class Main{
         
         this.arm = new Arm();   //-----Initialize objects
         this.drawing = new Drawing();
+
+        tool_path = new ToolPath();
         this.run();
         arm.draw(); //-----irrelevant - called inside run()
     }
@@ -149,8 +153,7 @@ public class Main{
     
     // save angles into the file
     public void save_ang(){
-        String fname = UIFileChooser.open();
-        tool_path.convert_drawing_to_angles(drawing,arm,fname);
+        tool_path.convert_drawing_to_angles(drawing,arm);
     }
     
     
@@ -163,6 +166,12 @@ public class Main{
             arm.draw();
             UI.sleep(20);
         }
+    }
+
+    private void savePWM(){
+        tool_path.convert_drawing_to_angles(drawing,arm);
+        tool_path.convert_angles_to_pwm(arm);
+        tool_path.save_pwm_file();
     }
 
     public static void main(String[] args){

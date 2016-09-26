@@ -100,6 +100,9 @@ public class Arm
         UI.drawString(out_str, motor2X +2*mr, motor2Y -mr/2+3*mr);
         out_str=String.format("motor2Y=%d", motor2Y);
         UI.drawString(out_str, motor2X +2*mr, motor2Y -mr/2+4*mr);
+
+        UI.drawString(("PWM " + get_pwm1()), motor1X -2*mr, -mr/2+5*mr);
+        UI.drawString(("PWM " + get_pwm2()), motor2X -2*mr, -mr/2+5*mr);
     // parameters of servo motors - linear function pwm(angle)
     // each of two motors has un
 
@@ -112,7 +115,7 @@ public class Arm
         UI.setColor(Color.GRAY);
         UI.drawRect(0,0,640,480);
          
-       // it can b euncommented later when
+       // it can be uncommented later when
        // kinematic equations are derived
         if ( valid_state) {
           // draw upper arms
@@ -211,11 +214,13 @@ public class Arm
 
         theta1 = Math.atan2(joint1Y - motor1Y, joint1X - motor1X);
 
-        //if ((theta1>0)||(theta1<-Math.PI)){
-        //    valid_state = false;
-            //UI.println("Ange 1 -invalid");
-        //    return;
-        //}
+        /*
+        if ((theta1>0)||(theta1<-Math.PI)){
+            valid_state = false;
+            UI.println("Ange 1 -invalid");
+            return;
+        }
+        */
         
         // theta12 = atan2(yj12 - motor1Y,xj12-motor1X);
 
@@ -249,11 +254,11 @@ public class Arm
             return;
         }
         */
+
         
         UI.printf("toolX:%3.1f, toolY:%3.1f\n",toolX,toolY);
         UI.printf("theta1:%3.1f, theta2:%3.1f\n",theta1*180/Math.PI,theta2*180/Math.PI);
         return;
-
 
     }
     
@@ -275,11 +280,11 @@ public class Arm
     // for motor to be in position(angle) theta1
     // linear intepolation
     public int get_pwm1(){
-        return (int)(-10*(theta1-89));
+        return (int)(-10*theta1+240);
     }
     // ditto for motor 2
     public int get_pwm2(){
-        return (int)(-10*(theta2-89));
+        return (int)(-10*theta2+890);
     }
     
  }
