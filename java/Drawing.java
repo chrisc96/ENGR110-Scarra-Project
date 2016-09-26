@@ -22,8 +22,7 @@ import java.io.InputStreamReader;
 import java.awt.Color;
 
 
-public class Drawing
-{
+public class Drawing {
 
     // set of points
     private ArrayList<PointXY> path;
@@ -40,7 +39,7 @@ public class Drawing
     {
         PointXY new_point = new PointXY(x,y,pen);
         path.add(new_point);
-        UI.printf("Pioint added.x=%f y=%f pen=%b New path size - %d\n",
+        UI.printf("Point added.x=%f y=%f pen=%b New path size - %d\n",
               x,y,pen,path.size());
     }
 
@@ -71,6 +70,10 @@ public class Drawing
         }
     }
 
+    public ArrayList<PointXY> getPath() {
+    	return path;
+    }
+    
     public int get_path_size(){
         return path.size();
     }
@@ -144,5 +147,7 @@ public class Drawing
         PointXY p = path.get(i);
         return p;
     }
+    
+    
 
 }

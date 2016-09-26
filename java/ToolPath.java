@@ -136,7 +136,6 @@ public class ToolPath{
         try {
             PrintStream out = new PrintStream(fname);
             for(int i=0; i< pwm1_vector.size(); i++){
-            	UI.printf("%d,%d,%d\n", pwm1_vector.get(i), pwm2_vector.get(i), pwm3_vector.get(i));
                 out.printf("%d,%d,%d\n", pwm1_vector.get(i), pwm2_vector.get(i), pwm3_vector.get(i));
             }
         } catch (FileNotFoundException e) {
