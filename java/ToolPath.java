@@ -35,7 +35,7 @@ public class ToolPath{
     public ToolPath()
     {
         // initialise instance variables
-      n_steps = 50;
+      n_steps = 1;
       theta1_vector = new ArrayList<Double>();
       theta2_vector = new ArrayList<Double>();
       pen_vector = new ArrayList<Integer>();
@@ -53,6 +53,7 @@ public class ToolPath{
             // take two points
             PointXY p0 = drawing.get_drawing_point(i-1);
             PointXY p1 = drawing.get_drawing_point(i);
+            n_steps = (int) Math.hypot(p1.get_x() - p0.get_x(), p1.get_y() - p0.get_y());
             // break line between points into segments: n_steps of them
             for ( int j = 0 ; j< n_steps;j++) { // break segment into n_steps str. lines
                 double x = p0.get_x() + j*(p1.get_x()-p0.get_x())/n_steps;
@@ -63,12 +64,13 @@ public class ToolPath{
                 pwm1_vector.add(arm.get_pwm1());
                 pwm2_vector.add(arm.get_pwm2());
                 if (p1.get_pen()) {
-                	// Pen down is 1000 PWM
-                	pwm3_vector.add(1000);
+                	// Pen down is 1700 PWM
+                	pwm3_vector.add(1650);
                 }
                 else {
-                	// Pen up is 1700 PWM
-                	pwm3_vector.add(1700);
+                	// Pen up is 1200 PWM
+                	pwm3_vector.add(1200);
+                    break;
                 }
             }
         }

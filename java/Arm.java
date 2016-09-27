@@ -96,7 +96,7 @@ public class Arm
         UI.drawString(out_str, motor2X -2*mr, motor2Y -mr/2+3*mr);
         
         out_str=String.format("motor2Y: %d", motor2Y);
-        UI.drawString(out_str, motor2X -2*mr, motor2Y -mr/2+4*mr);
+        UI.drawString(out_str, motor2X -1002*mr, motor2Y -mr/2+4*mr);
         
         out_str=String.format("PWM2: %d", pwm2);
         UI.drawString(out_str, motor2X -2*mr, motor2Y -mr/2+5*mr);
@@ -240,13 +240,43 @@ public class Arm
             UI.println("Out of bounds of Servo's - invalid");
             return;
         }
-        
+
+        if(Math.hypot(joint2X-joint1X, joint2Y-joint1Y) > 0.99*2*r || toolY > 265){
+            valid_state = false;
+            return;
+        }
+
         UI.printf("toolX:%3.1f, toolY:%3.1f\n",toolX,toolY);
         UI.printf("theta1:%3.1f, theta2:%3.1f\n",theta1*180/Math.PI,theta2*180/Math.PI);
         return;
     }
 
-    
+
+
+    public void circle(Drawing drawing){
+        drawing.getPath().clear();
+        //(x – h)^2 + (y – k)^2 = r^2
+
+        //r is radius
+        //h is circle centre x
+        //k is circle centre y
+
+        double r = 100/3; //50 mm this needs to be changed when we find out pixel to mm ratio
+        double h = motor1X + ((motor2X - motor1X)/2);
+        double k = 170; //Arbitrary right now
+
+        double x;
+        double y;
+
+        //int points = 50;
+        for(int i=0; i<360; i++){
+            x = r * Math.cos(i*Math.PI/180) + h;
+            y = r * Math.sin(i*Math.PI/180) + k;
+            drawing.add_point_to_path(x, y, true);
+        }
+        drawing.draw();
+
+    }
     
     // returns angle of motor 1
     public double get_theta1(){

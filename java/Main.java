@@ -42,15 +42,11 @@ public class Main{
         UI.setDivider(0.4);
 
         UI.addButton("Enter path XY", this::enter_path_xy);
+        UI.addButton("Generate Circle", this::generateCircle);
         UI.addButton("Convert to PWM", this::savePWM);
-        UI.addButton("Send to RPi", () -> {
-			try {
-				sendToRPI();
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
-		});
+        UI.addButton("Send to RPi", this::sendToRPI);
         UI.addButton("Quit", UI::quit);
+
         
         // Event Handlers
         UI.setMouseMotionListener(this::doMouse);
@@ -158,6 +154,10 @@ public class Main{
         }
     }
 
+    public void generateCircle(){
+        arm.circle(drawing);
+    }
+
     public void enter_path_xy(){
     	UI.clearText();
         state = 2;
@@ -181,15 +181,28 @@ public class Main{
         tool_path.save_pwm_file();
     }
 
-    public void sendToRPI() throws IOException {
-    	String fileToSend = UIFileChooser.open();
-		if (fileToSend == null) return;
-		
-		// https://www.raspberrypi.org/documentation/remote-access/ssh/scp.md
-		
-		String[] command = {"/usr/bin/bash", "scp", "/Test_Cases/${fileToSend}", "pi@IP-HERE:Arm/"};
-		ProcessBuilder proc = new ProcessBuilder(command);
-		proc.start();
+    public void sendToRPI() {
+        String path = UIFileChooser.open();
+
+        try {
+            String command = "expect /am/rialto/home1/tanoielis/private/ENGR110/SCARA/transfer.exp " + path;
+            Process proc = Runtime.getRuntime().exec(command);
+
+
+            BufferedReader reader = new BufferedReader(new InputStreamReader(proc.getInputStream()));
+            String line = "";
+            while((line = reader.readLine()) != null) {
+                System.out.print(line + "\n");
+            }
+            proc.waitFor();
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+
+
     }
     
     public static void main(String[] args){
