@@ -1,0 +1,7 @@
+#!/usr/bin/expect -f
+    set name [lindex $argv 0];
+    spawn scp $name pi@10.140.163.125:Arm/
+    set pass "pi"
+    expect {
+	password: {send "$pass\r"; exp_continue}
+    }
