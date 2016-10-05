@@ -91,7 +91,7 @@ public class ToolPath{
     // save file with motor control values
     public void save_pwm_file(){
         File fname = new File(UIFileChooser.save("Save File"));
-
+        if(fname == null) return;
         try {
             PrintStream out = new PrintStream(fname);
             for(int i=0; i< pwm1_vector.size(); i++){
