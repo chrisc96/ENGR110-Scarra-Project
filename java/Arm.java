@@ -139,9 +139,11 @@ public class Arm
            double xA = (joint1X + joint2X)/2;
            double yA = (joint1Y + joint2Y)/2;
 
-           double aLen = Math.sqrt(xA*xA + yA*yA);
-
-           double h = dist(0, r, 0, aLen);
+           //double aLen = Math.sqrt(xA*xA + yA*yA);
+           //double h = dist(0, r, 0, aLen);
+	       
+	   double h = Math.sqrt(r*r + Math.sqrt(xA*xA + yA*yA));
+	       
            double a = Math.atan((joint2Y-joint1Y)/(joint2X-joint1X));
 
            toolX = xA - h * Math.cos(a - Math.PI/2);
